@@ -48,6 +48,37 @@
 			$_SESSION['is_admin'] = 'FALSE';
 	    	setcookie("uid", "deleted", time()-3600);
 	    	setcookie("username", "deleted", time()-3600);
+
+    case "logout":
+
+        setcookie("uid", "deleted", time() - 3600);
+        setcookie("username", "deleted", time() - 3600);
+
+        $l_cookie_options = array(
+            'expires' => time() - 3600,              // 0 means session cookie
+            'path' => '/',               // '/' means entire domain
+            //'domain' => '.example.com', // default is current domain
+            'secure' => FALSE,           // true or false
+            'httponly' => TRUE,         // true or false
+            'samesite' => 'Strict'          // None || Lax  || Strict
+        );
+        setcookie("username", "deleted", $l_cookie_options);
+        setcookie("uid", "deleted", $l_cookie_options);
+
+        //setrawcookie() allows for response splitting
+        $lUsernameCookie = $lRecord->username;
+        $l_cookie_options = array(
+            'expires' => time() - 3600,              // 0 means session cookie
+            'path' => '/',               // '/' means entire domain
+            //'domain' => '.example.com', // default is current domain
+            'secure' => FALSE,           // true or false
+            'httponly' => FALSE,         // true or false
+            'samesite' => 'Lax'          // None || Lax  || Strict
+        );
+        setrawcookie("username", "deleted", $l_cookie_options);
+        setrawcookie("uid", "deleted", $l_cookie_options);
+
+
 	    	header("Location: index.php?page=home.php&popUpNotificationCode=LOU1", TRUE, 302);
 	    	exit(0);
 	    break;//case "logout"
@@ -175,4 +206,3 @@
 
 		default: break;
     }// end switch
-?>
